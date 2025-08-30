@@ -133,15 +133,23 @@ while True:
 |""")
         
         if numeros_saques < LIMITE_SAQUES:
-            try:
-                valorsaque = float(input("""
+                while True:
+                    try:
+                        valorsaque = float(input("""
 |
-|  Insira o valor de saque: 
+|  Insira o valor de saque : 
+|* Limite de R$500.00
+|=> """))  
+                        if valorsaque > 500:
+                            print("""
 |
-|=> """))
-                sacar(valorsaque)
-            except:
-                print("""
+|  Valor acima do limite de R$500.00!
+|""")
+                        elif valorsaque <= 500:
+                            sacar(valorsaque)
+                            break
+                    except:
+                        print("""
 |
 |  Por favor insira um valor numérico!
 |""")
