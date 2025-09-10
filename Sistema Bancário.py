@@ -1,17 +1,5 @@
-'''
-Precisaremos fazer 3 funcoes: deposito, saque e extrato
-Apenas um usuário
 
-Todos os depositos devem ser armazenados em uma variável e exibidos na operação de extrato
-
-O sistema deve permitir 3 saques diários com limite de 500 reais por saque. 
-Se o usuário não tiver saldo, precisa-se enviar uma mensagem informando.
-Todos os saques devem ser armazenados em uma variável saque para extrato.
-
-O extrato deve listar todas as operações de saque e deposito feitas na conta. 
-E no final da listagem deve aparecer o saldo atual
-Todos os valores devem ser exibidos no formato R$XXX.00
-'''
+import datetime
 
 menu = """
 
@@ -40,44 +28,74 @@ saldo = 0
 limite = 500
 numeros_saques = 0
 LIMITE_SAQUES = 3
-
+mascara = "%d/%m/%Y %a %H:%M"
+diahoje = "01/01/2000"
+transacoes = 0
 
 # || FUNCOES  ||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+def numtransacoes():
+    global diahoje, transacoes
+    timenow = datetime.datetime.now()
+    if timenow.date() != diahoje:
+        diahoje = timenow.date()
+        print("A DATA É NOVA E FOI SUBSTITUIDA")
+    if timenow.date() == diahoje:
+        transacoes += 1
+        print("Transacoes", transacoes)
+
+
+
+
 
 def depositar(valor):
     global saldo
-    saldo += valor
-    depositos.append(f"|  Deposito: R${valor}")
-    extrato.append(f"|  Deposito: R${valor}")
-    print(f"""
+    numtransacoes()
+    if transacoes >= 10:
+        print("Sentimos muito! Número de transações diárias alcançado!")
+
+    elif transacoes < 10:
+        saldo += valor
+        timenow = datetime.datetime.now()
+        depositos.append(f"|  Deposito: R${valor}   {timenow.strftime(mascara)}")
+        extrato.append(f"|  Deposito: R${valor}   {timenow.strftime(mascara)}")
+        print(f"""
 |                                      
 | Depósito                             
 |                                      
 | Valor de depósito: R${valor:}        
 | Saldo final: R${saldo:}               
 |
-        """)
-    return 
+            """)
+        return 
+    
+
+
 
 def sacar(valorsaque):
     global numeros_saques 
     global saldo
-    numeros_saques += 1
+    numtransacoes()
+    if transacoes >= 10:
+        print("Sentimos muito! Número de transações diárias alcançado!")
+    elif transacoes < 10:
+        numeros_saques += 1
 
-    if valorsaque <= saldo:
-        saldo -= valorsaque
-        saques.append(f"|  Saque: -R${valorsaque}")
-        extrato.append(f"|  Saque: -R${valorsaque}")
-        print(f"""
+        if valorsaque <= saldo:
+            saldo -= valorsaque
+            timenow = datetime.datetime.now()
+            saques.append(f"|  Saque: R${valorsaque}   {timenow.strftime(mascara)}")
+            extrato.append(f"|  Saque: R${valorsaque}   {timenow.strftime(mascara)}")
+            print(f"""
 |                                      
 | Saque                            
 |                                      
-| Valor de saque: -R${valorsaque:}        
+| Valor de saque: R${valorsaque:}        
 | Saldo final: R${saldo:}               
 |
-        """)
-    else: 
-        print("Saldo Indisponivel")
+            """)
+        else: 
+            print("Saldo Indisponivel")
+    
 
 # || LISTAS |||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
 
