@@ -50,10 +50,10 @@ def numtransacoes():
 def depositar(valor):
     global saldo
     numtransacoes()
-    if transacoes >= 10:
+    if transacoes > 10:
         print("Sentimos muito! Número de transações diárias alcançado!")
 
-    elif transacoes < 10:
+    elif transacoes <= 10:
         saldo += valor
         timenow = datetime.datetime.now()
         depositos.append(f"|  Deposito: R${valor}   {timenow.strftime(mascara)}")
@@ -75,9 +75,9 @@ def sacar(valorsaque):
     global numeros_saques 
     global saldo
     numtransacoes()
-    if transacoes >= 10:
+    if transacoes > 10:
         print("Sentimos muito! Número de transações diárias alcançado!")
-    elif transacoes < 10:
+    elif transacoes <= 10:
         numeros_saques += 1
 
         if valorsaque <= saldo:
